@@ -1,33 +1,4 @@
-/*
- * EXAM PAPER REPOSITORY - repaired & extended C++ console project
- * ----------------------------------------------------------------
- * Based on this1.docx. The original file had compile-breaking corruption:
- *   - a bare `Virtual` token before `class User`
- *   - a bare `Demo` token before `oopDemoMenu()`
- *   - smart quotes: cout << ”11. Type Casting\n”;
- * All three are fixed here.
- *
- * Concepts preserved from the original:
- *   classes/objects, encapsulation, abstraction (abstract class), inheritance,
- *   multiple inheritance, polymorphism, virtual functions, virtual base class
- *   (diamond), constructors, this pointer, pointers to objects/derived classes,
- *   function overriding, overloading, operator overloading, friend function,
- *   access specifiers, basic<->class and class<class casting.
- *
- * Concepts ADDED for the lab (the ones the original file said were NOT used):
- *   EXCEPTION HANDLING
- *     - try / catch / throw
- *     - "throws" equivalent: noexcept(false) + documented callee contract
- *     - finally block: RAII ScopeGuard (C++ has no `finally` keyword)
- *     - user-defined exceptions (RepositoryException hierarchy)
- *     - catching base-class and derived-class exceptions (correct ordering)
- *   MULTITHREADING
- *     - std::thread, std::mutex, std::atomic, std::async/std::future
- *     - exceptions thrown inside threads are caught locally
- *
- * Build:  make        (or: g++ -std=c++17 -O2 -pthread main.cpp -o exam_repo)
- * Run:    ./exam_repo
- */
+
 
 #include <iostream>
 #include <vector>
@@ -47,9 +18,8 @@
 
 using namespace std;
 
-// ===========================================================================
 // 1. USER-DEFINED EXCEPTIONS  (lab topic)
-// ===========================================================================
+
 class RepositoryException : public runtime_error {          // BASE class
 public:
     explicit RepositoryException(const string &msg) : runtime_error(msg) {}
@@ -73,9 +43,9 @@ public:
     Finally &operator=(const Finally &) = delete;
 };
 
-// ===========================================================================
+
 // 2. SMALL INPUT HELPERS
-// ===========================================================================
+
 void pauseScreen() {
     cout << "\nPress Enter to continue...";
     cin.clear();
@@ -111,9 +81,9 @@ string readText(const string &prompt) {
     return value;
 }
 
-// ===========================================================================
+
 // 3. ENTITIES (encapsulation)
-// ===========================================================================
+
 class Subject {
 private:
     string code_, name_, branch_;
@@ -189,9 +159,8 @@ struct Assessment {
 struct Result    { int assessmentId, score; string title, studentId; };
 struct Attendance { string studentId, subject, date, status; };
 
-// ===========================================================================
 // 4. TYPE CASTING DEMOS (preserved from original)
-// ===========================================================================
+
 class Semester { int s_; public: Semester(int s = 0) : s_(s) {} void display() const { cout << "Semester: " << s_ << '\n'; } }; // basic -> class
 class Year      { int y_; public: Year(int y = 0) : y_(y) {} operator int() const { return y_; } };                          // class -> basic
 class Marks     { int m_; public: Marks(int m = 0) : m_(m) {} int get() const { return m_; } };
@@ -199,9 +168,9 @@ class Grade     { char g_ = 'F'; public: Grade() = default; Grade(const Marks &m
     int s = m.get(); g_ = s >= 90 ? 'A' : s >= 75 ? 'B' : s >= 60 ? 'C' : 'D'; }
     void display() const { cout << "Grade: " << g_ << '\n'; } };
 
-// ===========================================================================
+
 // 5. ABSTRACT USER + DERIVED ROLES (inheritance / polymorphism)
-// ===========================================================================
+
 class User {                                   // ABSTRACT class (the bare "Virtual" token is gone)
 private:
     string id_, name_, email_, password_;
@@ -317,9 +286,9 @@ public:
     }
 };
 
-// ===========================================================================
+
 // 6. MANAGER (data + business rules, uses the custom exceptions)
-// ===========================================================================
+
 class PaperManager {
 private:
     vector<ExamPaper> papers_;
@@ -428,9 +397,9 @@ public:
 
 PaperManager g_manager;   // shared in-memory data for this console app
 
-// ===========================================================================
+
 // 7. EXCEPTION-HANDLING DEMOS  (lab topic)
-// ===========================================================================
+
 // "throws" equivalent: C++17 removed dynamic exception specifications, so a
 // callee that may throw is marked noexcept(false) and documents its contract.
 // (Java: `Paper loadPaper(int id) throws PaperNotFoundException`)
@@ -491,9 +460,9 @@ void demoExceptionHandling() {
     pauseScreen();
 }
 
-// ===========================================================================
+
 // 8. MULTITHREADING DEMO  (lab topic - was missing from the original file)
-// ===========================================================================
+
 void demoMultithreading() {
     clearScreen();
     cout << "============== MULTITHREADING DEMO ==============\n";
@@ -545,9 +514,8 @@ void demoMultithreading() {
     pauseScreen();
 }
 
-// ===========================================================================
 // 9. OOP CONCEPT DEMONSTRATION MENU (original menu + the two new demos)
-// ===========================================================================
+
 void oopDemoMenu() {
     int choice;
     do {
@@ -634,9 +602,9 @@ void oopDemoMenu() {
     } while (choice != 14);
 }
 
-// ===========================================================================
+
 // 10. SCREENS
-// ===========================================================================
+
 void showSearch() {
     clearScreen();
     cout << "================ SEARCH PAPERS ================\n";
@@ -886,9 +854,9 @@ void adminScreen(Admin &a) {
     a.logout();
 }
 
-// ===========================================================================
+
 // 11. MAIN
-// ===========================================================================
+
 bool loginUser(User &u) {
     clearScreen();
     cout << "========================================\n";
